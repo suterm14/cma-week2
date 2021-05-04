@@ -67,8 +67,14 @@ ggplot(wildschwein_BE, aes(DatetimeUTC, TierID, colour = TierID)) +
 # zeigt auf, dass Tier 018A zeitgleich mit 016A begonnen hat zu tracken, jedoch 018A länger gtrackt wurde. 
 # 002A wurde am längsten getrackt. startete früher und endet zeitgleich mit 018A.
 
-#Abbildung zwei verstehe ich nicht
+#Abbildung 2
 
+
+ggplot(wildschwein_BE,aes(x= wildschwein_BE$timelag, y=count(wildschwein_BE, timelag)))+
+         geom_histogram()+
+  theme(legend.position = "none")
+# Don't know how to automatically pick scale for object of type sf/tbl_df/tbl/data.frame. Defaulting to continuous.
+# ausserdem müsste y-Achse noch logarhythmiert werden. 
 
  # Abbildung 3
 ggplot(wildschwein_BE, aes(DatetimeUTC, timelag, colour= TierID)) +
@@ -81,8 +87,26 @@ ggplot(wildschwein_BE, aes(DatetimeUTC, timelag, colour= TierID)) +
 
 
 
+### Task 2: Deriving movement    --> HELP
 
-### Task 2: Deriving movement
+
+#Einfügen mit  mutate
+wildschwein_BE <- wildschwein_BE %>% 
+  group_by(TierID) %>%
+  mutate(steplenght = sqrt((E -lead(E,1))^2 + (N - lead(N,))^2))
+View(wildschwein_BE)
+
+
+
+#berechnung Speed
+#steplength /timelag 
+#Überlegung: die steplengh ist in koordinate, timelag in sekunden. 
+
+wildschwein_BE <- wildschwein_BE %>%
+  mutate(speed=steplenght/timelag)
+wildschwein_BE
+
+
 
 
 
